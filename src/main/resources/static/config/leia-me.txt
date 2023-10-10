@@ -1,0 +1,100 @@
+Anotação @ModelAttribute
+
+A anotação `@ModelAttribute` é uma anotação em Java que é frequentemente usada em aplicativos da Web, especialmente com o framework Spring MVC. 
+Ela desempenha um papel importante na ligação de dados entre a camada de visualização e o controlador em uma aplicação web.
+
+Informações importantes sobre a anotação `@ModelAttribute`:
+
+1. **Objetivo**: A anotação `@ModelAttribute` é usada para associar um método ou um parâmetro de método a um modelo de dados. Ela é usada para 
+preencher um modelo com dados que são posteriormente enviados para a camada de visualização (geralmente um template HTML) para exibição.
+
+2. **Uso em Métodos**: Pode ser usada para anotar métodos dentro de um controlador. Esses métodos podem retornar objetos que serão adicionados 
+ao modelo e, portanto, estarão disponíveis para a camada de visualização.
+
+   Exemplo:
+   ```java
+   @Controller
+   public class MyController {
+       @ModelAttribute("message")
+       public String getMessage() {
+           return "Hello, World!";
+       }
+   }
+   ```
+   Neste exemplo, o valor retornado pelo método `getMessage` será adicionado ao modelo com o nome "message" e pode ser acessado na camada de visualização.
+
+3. **Uso em Parâmetros de Método**: A anotação `@ModelAttribute` também pode ser usada em parâmetros de métodos de controladores para receber 
+valores do modelo. Isso é útil quando você precisa obter dados do modelo no controlador.
+
+   Exemplo:
+   ```java
+   @Controller
+   public class MyController {
+       @GetMapping("/greet")
+       public String greet(@ModelAttribute("message") String message) {
+           // O valor "Hello, World!" do modelo será injetado no parâmetro "message".
+           return "greetPage";
+       }
+   }
+   ```
+
+4. **Nome do Atributo**: A anotação `@ModelAttribute` permite especificar um nome para o atributo no modelo. O nome é fornecido entre parênteses, 
+como em `@ModelAttribute("message")`. Esse nome é usado para acessar o atributo na camada de visualização.
+
+5. **Binding de Dados**: Além de simplesmente fornecer valores ao modelo, o `@ModelAttribute` também desempenha um papel no processo de binding 
+de dados. Isso significa que ele pode ser usado para preencher objetos complexos a partir dos parâmetros da solicitação HTTP e adicioná-los ao 
+modelo.
+
+6. **Uso com Spring MVC**: A anotação `@ModelAttribute` é frequentemente usada em conjunto com o framework Spring MVC para criar aplicativos da 
+web baseados em Java. Ela ajuda na separação de preocupações, permitindo que os controladores se concentrem na manipulação de solicitações e 
+respostas, enquanto os modelos de dados são preenchidos e disponibilizados para a camada de visualização de maneira mais organizada.
+
+Em resumo, a anotação `@ModelAttribute` é uma parte fundamental do desenvolvimento de aplicativos da web com Spring MVC em Java, permitindo a 
+passagem de dados entre o controlador e a camada de visualização de forma eficiente. Ela ajuda a manter o código limpo e organizado, facilitando 
+a manutenção e o desenvolvimento de aplicativos web robustos.
+
+
+---------------------------------------------------------------------- // ----------------------------------------------------------------------
+
+Classe Model
+
+A Interface `Model` do pacote `org.springframework.ui` faz parte do framework Spring, especificamente do módulo Spring Web. Essa interface é uma 
+faz parte do mecanismo de ligação de dados do Spring MVC, e ela é usada para passar dados do controlador para a camada de visualização em um 
+aplicativo da web Spring. A classe `Model` atua como um contêiner para os atributos que serão disponibilizados na camada de visualização 
+(normalmente uma página JSP, Thymeleaf, FreeMarker, etc.).
+
+Visão geral de como a classe `Model` é usada:
+
+1. **Adição de Atributos**: O controlador pode adicionar atributos à instância de `Model` para disponibilizá-los na camada de visualização. Esses 
+atributos são geralmente pares nome-valor, onde o nome é uma String que identifica o atributo e o valor é o próprio objeto de dados que será 
+acessível na camada de visualização.
+
+   Exemplo:
+   ```java
+   @Controller
+   public class MyController {
+       @GetMapping("/exemplo")
+       public String exemplo(Model model) {
+           model.addAttribute("mensagem", "Olá, Spring!");
+           return "paginaDeExemplo";
+       }
+   }
+   ```
+
+2. **Acesso na Camada de Visualização**: Na camada de visualização (como um template Thymeleaf ou JSP), você pode acessar os atributos adicionados 
+ao `Model` usando a sintaxe apropriada para o mecanismo de template utilizado.
+
+   Exemplo (Thymeleaf):
+   ```html
+   <p th:text="${mensagem}"></p>
+   ```
+
+3. **Escopo de Atributos**: Os atributos adicionados ao `Model` são tipicamente de escopo de solicitação, o que significa que eles estarão 
+disponíveis somente durante o processamento da solicitação atual. Eles não persistem além dessa solicitação.
+
+4. **Alternativas**: Além do `Model`, o Spring MVC também fornece outras maneiras de passar dados para a camada de visualização, como o uso de 
+`ModelMap`, `ModelAndView`, `@SessionAttributes`, e assim por diante. A escolha depende dos requisitos específicos do aplicativo.
+
+A classe `Model` é uma parte fundamental do modelo de desenvolvimento Spring MVC, ajudando a manter a separação de preocupações e facilitando a 
+passagem de dados entre o controlador e a camada de visualização. Ela é especialmente útil quando se trabalha com aplicativos da web baseados em 
+Spring, onde a exibição e os dados estão claramente separados.
