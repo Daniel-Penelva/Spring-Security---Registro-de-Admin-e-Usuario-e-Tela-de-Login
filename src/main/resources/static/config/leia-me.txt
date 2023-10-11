@@ -106,7 +106,7 @@ Relação th:object e @ModelAttribute
 
 A relação entre `th:object` e `@ModelAttribute` envolve a vinculação de dados entre a camada de visualização (HTML/Thymeleaf) e o controlador em 
 um aplicativo Spring MVC. Ambos são usados para preencher um formulário com dados do modelo no lado do servidor e, em seguida, enviar esses dados 
-de volta para o servidor após a submissão do formulário. 
+de volta para o servidor após a submissão do formulário.
 
 Explicando como eles funcionam juntos:
 
@@ -139,3 +139,41 @@ existente), esses dados serão exibidos no formulário.
 
 Portanto, a combinação do `th:object` no HTML e do `@ModelAttribute` no controlador permite a passagem de dados entre a camada de visualização e 
 o controlador de forma transparente, tornando o desenvolvimento de formulários mais conveniente em aplicativos Spring MVC.
+
+
+---------------------------------------------------------------------- // ----------------------------------------------------------------------
+
+Inteface UserDetails
+
+A interface `UserDetails` é parte do Spring Security, que é uma estrutura de segurança amplamente usada em aplicativos Java para proteger recursos 
+e autenticar usuários. A interface `UserDetails` faz parte do módulo Spring Security e é usada para representar os detalhes de um usuário no 
+contexto da segurança. Essa interface define um conjunto de métodos que devem ser implementados para obter informações sobre um usuário e suas 
+credenciais.
+
+Alguns dos principais métodos definidos na interface `UserDetails`:
+
+1. `getAuthorities()`: Retorna uma coleção de objetos que representam as autorizações (papéis) do usuário. Cada autorização é representada como 
+                       uma implementação da interface `GrantedAuthority`, que define o nome da autorização e, opcionalmente, alguma informação 
+                       adicional.
+
+2. `getPassword()`: Retorna a senha do usuário. Normalmente, a senha é armazenada com segurança e criptografada.
+
+3. `getUsername()`: Retorna o nome de usuário do usuário.
+
+4. `isAccountNonExpired()`: Indica se a conta do usuário não está expirada.
+
+5. `isAccountNonLocked()`: Indica se a conta do usuário não está bloqueada.
+
+6. `isCredentialsNonExpired()`: Indica se as credenciais do usuário (normalmente, a senha) não estão expiradas.
+
+7. `isEnabled()`: Indica se a conta do usuário está habilitada ou desabilitada.
+
+A implementação da interface `UserDetails` é frequentemente associada a uma classe que representa um modelo de usuário em um sistema, e os 
+métodos acima são implementados para fornecer os detalhes específicos desse usuário em um contexto de segurança.
+
+Esses detalhes são essenciais para o mecanismo de autenticação e autorização do Spring Security. A classe que implementa a interface `UserDetails` 
+é normalmente usada em conjunto com a classe `UserDetailsService`, que é responsável por carregar os detalhes do usuário a partir de um 
+repositório de usuários (como um banco de dados) e fornecê-los ao Spring Security para a autenticação e autorização.
+
+No geral, a interface `UserDetails` é fundamental para a implementação de autenticação segura em aplicativos Spring com o Spring Security, 
+permitindo que você forneça detalhes de usuário e suas permissões de maneira personalizada e flexível.
