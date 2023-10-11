@@ -98,3 +98,44 @@ disponíveis somente durante o processamento da solicitação atual. Eles não p
 A classe `Model` é uma parte fundamental do modelo de desenvolvimento Spring MVC, ajudando a manter a separação de preocupações e facilitando a 
 passagem de dados entre o controlador e a camada de visualização. Ela é especialmente útil quando se trabalha com aplicativos da web baseados em 
 Spring, onde a exibição e os dados estão claramente separados.
+
+
+---------------------------------------------------------------------- // ----------------------------------------------------------------------
+
+Relação th:object e @ModelAttribute
+
+A relação entre `th:object` e `@ModelAttribute` envolve a vinculação de dados entre a camada de visualização (HTML/Thymeleaf) e o controlador em 
+um aplicativo Spring MVC. Ambos são usados para preencher um formulário com dados do modelo no lado do servidor e, em seguida, enviar esses dados 
+de volta para o servidor após a submissão do formulário. 
+
+Explicando como eles funcionam juntos:
+
+1. **`th:object`**:
+   - É uma expressão Thymeleaf que é usada para vincular um formulário a um objeto do modelo.
+   - No código HTML tem o seguinte trecho:
+     ```html
+     <form th:action="@{/registration}" method="post" role="form" th:object="${user}">
+     ```
+   - `th:object="${user}"` diz ao Thymeleaf para vincular o formulário ao objeto `${user}` no modelo. Isso significa que o formulário preencherá 
+      automaticamente seus campos com os valores desse objeto.
+
+2. **`@ModelAttribute`**:
+   - É uma anotação usada no controlador Spring para associar um objeto do modelo a um método ou parâmetro de método.
+   - No código de controlador tem o seguinte método:
+     ```java
+     public String saveUser(@ModelAttribute("user") UserDto userDto, Model model)
+     ```
+   - Nesse método, `@ModelAttribute("user")` é usado para associar o objeto `userDto` do modelo ao parâmetro `userDto` do método. Isso significa 
+     que o controlador espera que os dados do formulário (com base no `th:object`) sejam vinculados automaticamente ao objeto `userDto`.
+
+Como essas duas partes se relacionam:
+
+1. Quando o formulário é carregado inicialmente, o `th:object="${user}"` informa ao Thymeleaf para preencher o formulário com os valores do 
+objeto `${user}` no modelo. Isso significa que, se `${user}` tiver dados preexistentes (por exemplo, se você estiver editando um usuário 
+existente), esses dados serão exibidos no formulário.
+
+2. Quando o formulário é submetido, os dados são enviados de volta ao controlador e vinculados automaticamente ao objeto `userDto` usando 
+`@ModelAttribute("user")`. Isso permite que o controlador acesse os dados enviados pelo formulário por meio do objeto `userDto`.
+
+Portanto, a combinação do `th:object` no HTML e do `@ModelAttribute` no controlador permite a passagem de dados entre a camada de visualização e 
+o controlador de forma transparente, tornando o desenvolvimento de formulários mais conveniente em aplicativos Spring MVC.
