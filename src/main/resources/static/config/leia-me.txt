@@ -262,3 +262,451 @@ no momento do login e a compara com a senha criptografada armazenada no banco de
 Usar uma técnica de criptografia como o passwordEncoder.encode() é uma prática recomendada para proteger as senhas dos usuários em um aplicativo 
 Spring Security e evitar que elas sejam armazenadas em texto simples, o que tornaria as informações dos usuários vulneráveis em caso de violação 
 de segurança.
+
+---------------------------------------------------------------------- // ----------------------------------------------------------------------
+
+A classe `SecurityConfig` é uma parte fundamental de um aplicativo Spring que utiliza o Spring Security para configurar a segurança e o controle 
+de acesso. É uma classe personalizada que vai configurar as políticas de segurança, regras de autorização e autenticação do seu aplicativo. 
+
+Principais aspectos relacionados à classe `SecurityConfig`:
+
+1. **Configuração de Políticas de Segurança**: A classe `SecurityConfig` é o lugar onde define as políticas de segurança do seu aplicativo. Você 
+   pode configurar coisas como:
+
+   - Autorizações: Quem pode acessar quais recursos.
+   - Autenticação: Como os usuários serão autenticados (por exemplo, usando formulário de login, autenticação baseada em token, etc.).
+   - Gerenciamento de Sessão: Como as sessões dos usuários são tratadas.
+
+2. **Métodos de Configuração**: Pode sobrescrever métodos da classe `WebSecurityConfigurerAdapter` para definir as configurações de segurança. 
+     Alguns dos métodos comuns incluem:
+
+   - `configure(HttpSecurity http)`: Define as regras de autorização para URLs específicas, como quem pode acessar uma página de login, quem 
+      pode acessar a página inicial, etc.
+
+   - `configure(AuthenticationManagerBuilder auth)`: Configura o provedor de autenticação, como autenticar usuários com senhas armazenadas no 
+      banco de dados ou outros mecanismos.
+
+3. **Anotações**: Pode usar várias anotações do Spring Security, como `@EnableWebSecurity`, `@EnableGlobalMethodSecurity`, e outras, para 
+   habilitar e configurar recursos de segurança.
+
+4. **Personalização**: A classe `SecurityConfig` permite personalizar a segurança de acordo com as necessidades específicas do seu aplicativo. 
+   Pode definir diferentes estratégias de autenticação, autorização e lidar com aspectos de segurança, como autenticação de dois fatores, 
+   autenticação de tokens, entre outros.
+
+5. **Registro no contexto da aplicação**: Para que a configuração de segurança seja eficaz, você deve registrar a classe `SecurityConfig` no 
+   contexto da aplicação. Isso geralmente é feito por meio da configuração de componentes do Spring (XML ou anotações) ou pelo uso de classes de 
+   inicialização.
+
+Em resumo, a classe `SecurityConfig` é onde configura a segurança do aplicativo Spring com o Spring Security. É um componente central que permite 
+controlar como a autenticação e a autorização são gerenciadas no seu aplicativo, bem como aplicar medidas de segurança específicas ao contexto do 
+projeto.
+
+---------- // ----------
+
+Anotação @Configuration
+
+A anotação `@Configuration` é uma anotação do Spring Framework que marca uma classe como uma classe de configuração. As classes de configuração 
+são usadas para definir e configurar beans e componentes Spring, bem como especificar configurações globais para um aplicativo Spring. A anotação 
+`@Configuration` é parte do Spring Core Container e é frequentemente usada em conjunto com outras anotações, como `@Bean`, para criar 
+configurações personalizadas.
+
+Principais aspectos da anotação `@Configuration`:
+
+1. **Marcação de Classes de Configuração**: Ao marcar uma classe com `@Configuration`, você a informa ao Spring Framework que essa classe contém 
+configurações específicas do aplicativo. Em outras palavras, é uma classe que define beans Spring, configurações de segurança, configurações de 
+bancos de dados, entre outras configurações.
+
+2. **Centralização de Configurações**: O uso da anotação `@Configuration` é especialmente útil quando você deseja centralizar todas as 
+configurações e definições de beans em um único local, facilitando a manutenção e a organização do código.
+
+3. **Configurações Globais**: As classes de configuração podem ser usadas para definir configurações globais para todo o aplicativo, como 
+configurações de segurança, configurações de bancos de dados, configurações de log e muito mais.
+
+4. **Injeção de Dependências**: Os beans definidos em classes anotadas com `@Configuration` podem ser injetados em outras partes do aplicativo 
+usando injeção de dependências (por exemplo, com as anotações `@Autowired`).
+
+5. **Personalização e Extensibilidade**: Classes de configuração permitem personalizar o comportamento do container Spring de maneira flexível e 
+estendê-lo de acordo com as necessidades do aplicativo.
+
+6. **Escaneamento de Componentes**: Classes anotadas com `@Configuration` são automaticamente escaneadas pelo Spring durante a inicialização do 
+aplicativo para identificar configurações e beans.
+
+Em resumo, a anotação `@Configuration` é uma parte fundamental do Spring Framework que permite a definição de configurações, beans e 
+personalização do comportamento do container Spring. Ela é usada para criar classes de configuração centralizadas e reutilizáveis em aplicativos 
+Spring, contribuindo para a organização e modularidade do código.
+
+---------- // ----------
+
+Anotação @EnableWebSecurity
+
+A anotação `@EnableWebSecurity` é uma anotação do Spring Security que marca uma classe de configuração como sendo responsável por configurar a 
+segurança da web em um aplicativo Spring. Ela é uma parte fundamental do Spring Security e é usada para habilitar a configuração personalizada 
+das políticas de segurança, autenticação e autorização em aplicativos web baseados no Spring.
+
+Principais pontos relacionados à anotação `@EnableWebSecurity`:
+
+1. **Marcação da Classe de Configuração**: A anotação `@EnableWebSecurity` é aplicada a uma classe de configuração personalizada, que é 
+responsável por definir as políticas de segurança do aplicativo. 
+
+2. **Configuração da Segurança**: Ao usar `@EnableWebSecurity` pode definir várias políticas de segurança, como autorizações, autenticação, 
+tratamento de sessões e outros aspectos da segurança da web.
+
+3. **Personalização da Segurança**: A anotação `@EnableWebSecurity` permite a personalização completa da segurança. Pode configurar regras de 
+autorização para URLs específicas, exigir autenticação para acessar determinados recursos, definir como os formulários de login devem ser tratados 
+e muito mais.
+
+4. **Uso de Outras Anotações do Spring Security**: Além do `@EnableWebSecurity` pode usar outras anotações do Spring Security, como 
+`@PreAuthorize` e `@Secured`, para definir regras de autorização a nível de método em seus controladores.
+
+A anotação `@EnableWebSecurity` é fundamental para a criação de configurações de segurança personalizadas em aplicativos web baseados no Spring. 
+Ela fornece flexibilidade para definir políticas de segurança de acordo com os requisitos específicos do seu aplicativo e é uma parte central 
+da estrutura Spring Security.
+
+---------- // ----------
+
+Classe BCryptPasswordEncoder
+
+A classe `BCryptPasswordEncoder` faz parte do Spring Security e é uma implementação da interface `PasswordEncoder` que é usada para criptografar 
+senhas de forma segura usando o algoritmo de hash BCrypt. Ela é uma das opções recomendadas para proteger senhas em aplicativos Spring Security 
+devido à sua robustez e segurança.
+
+Informações sobre a classe `BCryptPasswordEncoder`:
+
+1. **Implementação da Interface `PasswordEncoder`**: A classe `BCryptPasswordEncoder` implementa a interface `PasswordEncoder`, que define os 
+métodos para criptografar senhas e verificar senhas criptografadas.
+
+2. **Uso do Algoritmo BCrypt**: O BCrypt é um algoritmo de hashing de senhas projetado para ser seguro e resistente a ataques de força bruta. 
+Ele é amplamente utilizado na indústria para armazenar senhas de forma segura.
+
+3. **Geração de Hash Aleatório**: O BCrypt gera automaticamente um "salt" (um valor aleatório) para cada senha que é adicionado ao hash. Isso 
+torna as senhas mais seguras, mesmo que duas senhas idênticas sejam criptografadas de maneira diferente devido aos salts diferentes.
+
+4. **Facilidade de Uso**: A classe `BCryptPasswordEncoder` é fácil de usar. Pode criptografar senhas chamando o método `encode()` e verificar 
+senhas chamando o método `matches()`.
+
+   Exemplo de criptografia de senha:
+   ```java
+   BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+   String hashedPassword = passwordEncoder.encode("senha123");
+   ```
+
+   Exemplo de verificação de senha:
+   ```java
+   BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+   boolean isMatch = passwordEncoder.matches("senha123", hashedPassword);
+   ```
+
+5. **Custo de Hash Ajustável**: O BCrypt permite ajustar o "custo" do hash, o que significa que você pode tornar a geração do hash mais lenta e 
+mais segura, dificultando ainda mais a força bruta. Isso é feito definindo um fator de custo no construtor do `BCryptPasswordEncoder`.
+
+   Exemplo com um custo de hash personalizado:
+   ```java
+   BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
+   ```
+
+6. **Segurança**: Devido ao uso do BCrypt e à adição automática de salts, o `BCryptPasswordEncoder` é uma opção segura para proteger senhas em 
+aplicativos Spring Security. É altamente recomendado para armazenamento seguro de senhas.
+
+Em resumo, a classe `BCryptPasswordEncoder` é uma ferramenta eficaz e segura para criptografar senhas em aplicativos Spring Security. Ela 
+utiliza o algoritmo BCrypt e fornece segurança adicional com o uso de salts, tornando as senhas mais resistentes a ataques. É uma escolha sólida 
+para proteger as informações dos usuários em aplicativos web e sistemas que requerem autenticação segura.
+
+---------- // ----------
+
+Classe SecurityFilterChain
+
+A classe `SecurityFilterChain` faz parte do framework Spring Security e é usada para definir a cadeia de filtros de segurança que são aplicados 
+a uma aplicação web. Ela permite configurar a segurança da aplicação por meio da definição da ordem e dos filtros que processam as requisições 
+HTTP, controlando, assim, a autenticação e a autorização em um aplicativo Spring Security.
+
+Alguns pontos-chave relacionados à classe `SecurityFilterChain`:
+
+1. **Definição da Cadeia de Filtros**: A classe `SecurityFilterChain` é usada para definir a ordem e os filtros que compõem a cadeia de filtros 
+de segurança em um aplicativo Spring Security. A ordem dos filtros é importante, pois afeta a sequência em que eles são aplicados às requisições.
+
+2. **Personalização da Segurança**: Por meio da configuração da classe `SecurityFilterChain` pode personalizar a segurança da sua aplicação. Isso 
+inclui a configuração de regras de autorização, configurações de autenticação, tratamento de erros e muito mais.
+
+3. **Uso em Configurações de Segurança**: Normalmente, a classe `SecurityFilterChain` é usada em conjunto com a anotação `@Bean` dentro de uma 
+classe de configuração de segurança. Você cria um ou mais objetos `SecurityFilterChain` e os define como beans Spring. Esses objetos representam 
+configurações específicas de segurança.
+
+   Exemplo de configuração de segurança usando `SecurityFilterChain`:
+   ```java
+   @Bean
+   public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
+       http
+           .authorizeRequests(authorizeRequests ->
+               authorizeRequests
+                   .antMatchers("/public/**").permitAll()
+                   .anyRequest().authenticated()
+           )
+           .formLogin(withDefaults());
+       return http.build();
+   }
+   ```
+
+4. **Múltiplas Cadeias de Filtros**: Pode definir várias instâncias de `SecurityFilterChain` para diferentes partes da sua aplicação web, 
+permitindo configurações de segurança diferentes com base em caminhos URL, por exemplo.
+
+5. **Extensibilidade e Personalização**: A classe `SecurityFilterChain` permite personalizar a segurança de acordo com as necessidades 
+específicas do seu aplicativo, permitindo que você adicione ou remova filtros de segurança, bem como defina regras de autorização específicas.
+
+Em resumo, a classe `SecurityFilterChain` é uma parte essencial do Spring Security que permite a configuração flexível e detalhada da segurança 
+em aplicativos web baseados no Spring. Ela é usada para definir e organizar a cadeia de filtros de segurança que processam as requisições HTTP, 
+proporcionando um alto nível de personalização e controle sobre a segurança da aplicação.
+
+---------- // ----------
+
+Classe AntPathRequestMatcher
+
+A classe `AntPathRequestMatcher` faz parte do Spring Security e é usada para comparar URLs de solicitações HTTP com padrões (ou padrões curinga) 
+para determinar se uma solicitação atende a um determinado critério. Ela é frequentemente usada para definir regras de autorização com base em 
+padrões de URL em aplicativos Spring Security.
+
+A principal finalidade da classe `AntPathRequestMatcher` é verificar se a URL de uma solicitação HTTP corresponde a um determinado padrão 
+especificado, permitindo que você configure as regras de autorização de maneira flexível com base em URLs.
+
+Algumas situações em que a classe `AntPathRequestMatcher` é usada:
+
+1. **Regras de Autorização**: É comum usá-la para definir regras de autorização em uma configuração de segurança Spring. Pode especificar quais 
+URLs ou padrões de URLs estão sujeitos a determinadas restrições de acesso, como permissões específicas ou autenticação.
+
+2. **Configuração de Filtros**: A classe `AntPathRequestMatcher` é frequentemente usada para configurar filtros que devem ser aplicados a URLs 
+específicas. Isso permite que defina filtros de segurança que processam apenas solicitações que correspondem a determinados padrões.
+
+3. **Proteção de Recursos**: Em aplicativos web pode usá-la para proteger recursos específicos, como páginas, APIs ou arquivos, permitindo ou 
+negando o acesso com base nas URLs.
+
+Aqui está um exemplo de uso da classe `AntPathRequestMatcher` em uma configuração de autorização Spring Security:
+
+```java
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+            .authorizeRequests()
+                .antMatchers("/public/**").permitAll()  // Público
+                .antMatchers("/admin/**").hasRole("ADMIN")  // Apenas para usuários com a função ADMIN
+                .anyRequest().authenticated()  // Todas as outras solicitações exigem autenticação
+                .and()
+            .formLogin()
+                .loginPage("/login")
+                .permitAll()
+                .and()
+            .logout()
+                .permitAll();
+    }
+}
+```
+
+Neste exemplo, `antMatchers` é usado para definir regras de autorização com base em padrões de URL. Ele permite que solicitações correspondam a 
+URLs específicas e sejam tratadas de acordo com as regras definidas, como permitir acesso público, exigir autenticação ou verificar funções de 
+usuário.
+
+Em resumo, a classe `AntPathRequestMatcher` é usada para comparar URLs de solicitações HTTP com padrões de URL para definir regras de autorização 
+e controle de acesso em aplicativos Spring Security. Isso fornece flexibilidade ao definir como as solicitações devem ser tratadas com base em 
+URLs específicas.
+
+---------- // ----------
+
+Classe AuthenticationManagerBuilder
+
+A classe `AuthenticationManagerBuilder` é uma parte importante do Spring Security e é usada para configurar o mecanismo de autenticação em 
+aplicativos Spring. Ela permite que defina como os usuários serão autenticados e forneçam detalhes sobre como o Spring Security deve validar as 
+credenciais do usuário, como nome de usuário e senha.
+
+Alguns pontos-chave relacionados à classe `AuthenticationManagerBuilder`:
+
+1. **Construção de um `AuthenticationManager`**: A classe `AuthenticationManagerBuilder` é usada para construir e configurar um objeto 
+`AuthenticationManager`, que é a parte central do mecanismo de autenticação do Spring Security. O `AuthenticationManager` é responsável por 
+autenticar os usuários.
+
+2. **Definição de Detalhes de Autenticação**: Pode usar métodos da classe `AuthenticationManagerBuilder` para definir como os detalhes de 
+autenticação dos usuários são armazenados e validados. Isso inclui informações como nome de usuário e senha.
+
+3. **Suporte a Diferentes Fontes de Autenticação**: O `AuthenticationManagerBuilder` suporta várias fontes de autenticação, incluindo 
+autenticação baseada em memória, autenticação baseada em banco de dados, autenticação baseada em LDAP e outras. Isso permite que configure a 
+autenticação de acordo com as necessidades específicas do seu aplicativo.
+
+4. **Métodos Comuns**: Alguns dos métodos comuns disponíveis no `AuthenticationManagerBuilder` incluem `inMemoryAuthentication()` para configurar 
+autenticação baseada em memória, `userDetailsService(UserDetailsService userDetailsService)` para configurar a autenticação usando um serviço de 
+detalhes de usuário personalizado e `jdbcAuthentication()` para configurar a autenticação com um banco de dados.
+
+5. **Personalização da Autenticação**: O `AuthenticationManagerBuilder` oferece a flexibilidade de personalizar o processo de autenticação. Isso 
+inclui a definição de consultas SQL personalizadas para buscar detalhes de usuário no banco de dados, bem como a configuração de políticas de 
+bloqueio de conta, controle de expiração de senha, autenticação de dois fatores e muito mais.
+
+6. **Integração com Configuração de Segurança**: Geralmente, o `AuthenticationManagerBuilder` é usado em conjunto com classes de configuração de 
+segurança (por exemplo, `WebSecurityConfigurerAdapter`) para definir as políticas de segurança em um aplicativo Spring Security. A configuração 
+da autenticação é um dos principais aspectos da segurança.
+
+Aqui está um exemplo simples de configuração de autenticação usando `AuthenticationManagerBuilder` em uma classe de configuração Spring Security:
+
+```java
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth
+            .inMemoryAuthentication()
+                .withUser("user")
+                .password("{noop}password") // Senha em texto simples
+                .roles("USER");
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+            // Configuração de autorizações e regras de segurança
+    }
+}
+```
+
+Neste exemplo, `inMemoryAuthentication()` é usado para configurar autenticação baseada em memória, com um usuário chamado "user" e uma senha em 
+texto simples "password". O método `configure(HttpSecurity http)` é usado para definir as regras de autorização.
+
+Em resumo, a classe `AuthenticationManagerBuilder` é usada para configurar o mecanismo de autenticação em aplicativos Spring Security, 
+permitindo que você defina como os usuários são autenticados e como as credenciais de autenticação são validadas. Isso é essencial para garantir 
+que as solicitações de login sejam tratadas de forma segura e eficaz.
+
+---------------------------------------------------------------------- // ----------------------------------------------------------------------
+
+Explicando Passo a Passo da Classe SecurityConfig:
+
+```java
+@Bean
+public static PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+}
+```
+
+O código acima é responsável por criar e configurar um bean do tipo `PasswordEncoder` usando a implementação `BCryptPasswordEncoder`. 
+
+Explicar em detalhes o que cada parte do script faz:
+
+1. `@Bean`: A anotação `@Bean` é usada para indicar ao Spring que um método deve ser tratado como um método de criação de um bean gerenciado pelo 
+contêiner Spring. Em outras palavras, ele cria e configura um objeto que pode ser injetado em outras partes do aplicativo.
+
+2. `public static PasswordEncoder passwordEncoder() { ... }`: Este é um método público estático que cria uma instância de `BCryptPasswordEncoder`, 
+que é uma implementação da interface `PasswordEncoder` do Spring Security. É estático porque a anotação `@Bean` geralmente é usada para métodos 
+estáticos ou em instâncias de classes gerenciadas pelo Spring, não em instâncias de objetos.
+
+3. `return new BCryptPasswordEncoder();`: Dentro do método, é criada uma instância da classe `BCryptPasswordEncoder`. Esta classe é responsável 
+por criptografar senhas usando o algoritmo de hash BCrypt, que é uma técnica segura e eficaz para proteger as senhas dos usuários.
+
+   - A senha é passada para o método `encode()` desta classe, que gera uma versão criptografada da senha.
+   - O algoritmo BCrypt também inclui a geração de um "salt" (um valor aleatório) para cada senha, o que torna as senhas ainda mais seguras.
+
+O objeto `BCryptPasswordEncoder` criado por esse método é, portanto, um componente Spring gerenciado que pode ser injetado em outras partes do 
+aplicativo, como em configurações de segurança ou em serviços de autenticação, para garantir que as senhas dos usuários sejam armazenadas de 
+forma segura e criptografada no banco de dados.
+
+Em resumo, o script está configurando um bean do tipo `PasswordEncoder` usando a implementação `BCryptPasswordEncoder`. Isso é uma prática 
+recomendada em aplicativos Spring Security para garantir a segurança das senhas dos usuários.
+
+---------- // ----------
+
+```java
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity.csrf(c -> c.disable())
+                .authorizeHttpRequests(request -> request.requestMatchers("/admin-page").permitAll()
+                        .requestMatchers("/user-page").permitAll()
+                        .requestMatchers("/registration", "/css/**").permitAll()
+                        .anyRequest()
+                        .authenticated())
+                .formLogin(form -> form.loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .defaultSuccessUrl("/").permitAll())
+                .logout(form -> form.invalidateHttpSession(true)
+                        .clearAuthentication(true)
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/login"))
+                        .logoutSuccessUrl("/login?logout").permitAll());
+
+        return httpSecurity.build();
+    }
+```
+
+O código acima está definindo uma `SecurityFilterChain`, que configura as políticas de segurança, autorização, autenticação e outras configurações 
+relacionadas à segurança. 
+
+Explicar em detalhes o que cada parte do script faz:
+
+1. `@Bean`: A anotação `@Bean` é usada para indicar que este método deve ser tratado como um método de criação de um bean gerenciado pelo 
+contêiner Spring. Nesse caso, o bean é uma instância de `SecurityFilterChain`, que representa a configuração da segurança no aplicativo.
+
+2. `public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception { ... }`: Este método configura a cadeia de 
+filtros de segurança do Spring Security e recebe um objeto `HttpSecurity` como argumento. O `HttpSecurity` é usado para configurar políticas de 
+segurança e autorizações.
+
+3. `httpSecurity.csrf(c -> c.disable())`: Essa linha desativa a proteção contra CSRF (Cross-Site Request Forgery), o que significa que 
+solicitações não precisam incluir um token CSRF. Isso é desativado com `c.disable()`.
+
+4. `.authorizeHttpRequests(...)`: Esse trecho define regras de autorização para diferentes URLs.
+
+   - `.requestMatchers("/admin-page").permitAll()`: Permite que todos acessem a URL "/admin-page" sem restrições.
+   - `.requestMatchers("/user-page").permitAll()`: Permite que todos acessem a URL "/user-page" sem restrições.
+   - `.requestMatchers("/registration", "/css/**").permitAll()`: Permite que todos acessem as URLs "/registration" e qualquer recurso CSS 
+      (URLs correspondentes a "/css/**") sem restrições.
+   - `.anyRequest().authenticated()`: Requer autenticação para qualquer outra URL não mencionada anteriormente.
+
+5. `.formLogin(...)`: Configura as páginas e ações relacionadas ao processo de login.
+
+   - `.loginPage("/login")`: Define a página de login como "/login".
+   - `.loginProcessingUrl("/login")`: Define a URL onde os dados de login são enviados para processamento.
+   - `.defaultSuccessUrl("/")`: Define a URL padrão para redirecionamento após um login bem-sucedido.
+   - `.permitAll()`: Permite que todos acessem as páginas relacionadas ao login.
+
+6. `.logout(...)`: Configura a funcionalidade de logout.
+
+   - `.invalidateHttpSession(true)`: Invalida a sessão do usuário após o logout.
+   - `.clearAuthentication(true)`: Remove a autenticação do usuário após o logout.
+   - `.logoutRequestMatcher(new AntPathRequestMatcher("/login"))`: Especifica a URL que acionará o processo de logout.
+   - `.logoutSuccessUrl("/login?logout")`: Define a URL para redirecionamento após o logout bem-sucedido.
+   - `.permitAll()`: Permite que todos acessem as páginas relacionadas ao logout.
+
+7. `return httpSecurity.build()`: Esse trecho retorna a configuração de segurança definida no `httpSecurity` como um objeto `SecurityFilterChain`.
+
+Em resumo, o script configura políticas de segurança, autorização, autenticação e funcionalidade de login/logout em um aplicativo Spring Security. 
+A configuração inclui permissões de acesso a URLs específicas, configuração da página de login, tratamento de logout e desativação da proteção 
+CSRF. O objeto `SecurityFilterChain` retornado é usado para configurar a segurança no aplicativo.
+
+---------- // ----------
+
+```java
+    @Autowired
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(customUserDetailService).passwordEncoder(passwordEncoder());
+    }
+```
+
+O código acima utiliza o `AuthenticationManagerBuilder` para definir como o Spring Security autenticará os usuários. 
+
+Explicar o que cada parte do script faz:
+
+1. `@Autowired`: A anotação `@Autowired` é usada para injetar uma instância do objeto `AuthenticationManagerBuilder` no método. O 
+`AuthenticationManagerBuilder` é uma classe do Spring Security usada para configurar a autenticação de usuários.
+
+2. `public void configure(AuthenticationManagerBuilder auth) throws Exception { ... }`: Este é um método de configuração que utiliza o 
+`AuthenticationManagerBuilder` para definir como a autenticação dos usuários será tratada.
+
+3. `auth.userDetailsService(customUserDetailService)`: Nesta linha, o método `userDetailsService()` do `AuthenticationManagerBuilder` é chamado, 
+e `customUserDetailService` é passado como argumento. Isso indica que o serviço de detalhes de usuário personalizado `customUserDetailService` 
+será usado para carregar informações do usuário durante o processo de autenticação. O `customUserDetailService` implementa a interface 
+`UserDetailsService` do Spring Security e fornece detalhes do usuário com base no nome de usuário.
+
+4. `.passwordEncoder(passwordEncoder())`: Nesta parte, a configuração do `PasswordEncoder` é definida para o `AuthenticationManagerBuilder`. O 
+método `passwordEncoder()` é chamado para obter uma instância do `PasswordEncoder`, que foi configurado anteriormente como um bean do Spring. 
+Essa configuração especifica como as senhas dos usuários serão verificadas durante o processo de autenticação. A senha será comparada à versão 
+criptografada armazenada no banco de dados usando o algoritmo do `PasswordEncoder`.
+
+Em resumo, este script configura o mecanismo de autenticação no Spring Security. Ele especifica que o `customUserDetailService` será usado para 
+carregar detalhes do usuário e que o `PasswordEncoder` (configurado como `BCryptPasswordEncoder` em um bean) será usado para verificar as senhas 
+dos usuários durante a autenticação. Isso é uma parte crítica da configuração de segurança, garantindo que o sistema possa autenticar os usuários 
+de forma segura.
