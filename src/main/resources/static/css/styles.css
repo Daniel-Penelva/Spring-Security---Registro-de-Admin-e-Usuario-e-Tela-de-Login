@@ -55,3 +55,14 @@ body {
     color: #3c8af0;
     font-weight: bold;
   }
+
+  .link-custom {
+    background-color: #942105; /* Define a cor de fundo do link */
+    color: #fff; /* Define a cor do texto do link (branco, por exemplo) */
+    padding: 10px 20px; /* Define o preenchimento interno do link para melhorar a estilização */
+    text-decoration: none; /* Remove o sublinhado padrão do link */
+}
+
+.link-custom:hover {
+    background-color: #3C8AF0; /* Define a cor de fundo quando o cursor paira sobre o link */
+}

@@ -14,6 +14,10 @@
     
     <div class="container">
       <h2>Welcome, [[${user.getFullname()}]] !</h2>
+
+      <span sec:authorize="isAuthenticated">
+        <a th:href="@{/logout}" class="link-custom">Logout</a>
+      </span>
     </div>
 
   </body>
