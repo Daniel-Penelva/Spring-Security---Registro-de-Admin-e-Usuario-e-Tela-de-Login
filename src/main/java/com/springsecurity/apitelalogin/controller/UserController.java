@@ -1,6 +1,10 @@
 package com.springsecurity.apitelalogin.controller;
 
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +19,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserDetailsService userDetailsService;
 
     // http://localhost:8080/registration
     @GetMapping("/registration")
@@ -40,13 +47,17 @@ public class UserController {
 
     // http://localhost:8080/user-page
     @GetMapping("/user-page")
-    public String userPage(){
+    public String userPage(Model model, Principal principal){
+        UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
+        model.addAttribute("user", userDetails);
         return "user";
     }
 
     // http://localhost:8080/admin-page
     @GetMapping("/admin-page")
-    public String adminPage(){
+    public String adminPage(Model model, Principal principal){
+        UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
+        model.addAttribute("user", userDetails);
         return "admin";
     }
 

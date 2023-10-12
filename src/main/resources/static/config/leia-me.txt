@@ -830,3 +830,92 @@ método hasAuthority e hasAnyAuthority para verificar as autorizações dos usu�
 
    -> .successHandler(customSuccessHandler): Configura um manipulador de sucesso de autenticação personalizado (customSuccessHandler) para lidar 
       com o redirecionamento após um login bem-sucedido.
+
+---------------------------------------------------------------------- // ----------------------------------------------------------------------
+
+Interface Principal
+
+A interface `Principal` é usada para representar a identidade do principal (usuário) que está associada a uma solicitação de segurança. No 
+contexto do Spring Security e da programação de segurança em geral, a interface `Principal` é comumente usada para representar o usuário 
+autenticado.
+
+Visão geral da interface `Principal` e seu uso no contexto do Spring Security:
+
+1. **java.security.Principal**: A interface `java.security.Principal` é uma interface do Java que representa a identidade de um usuário ou 
+entidade autenticada. Normalmente, ela contém um único método `getName()` que retorna o nome do principal (geralmente o nome de usuário) como uma 
+string.
+
+2. **No Spring Security**: O Spring Security permite que você acesse o principal associado a uma solicitação HTTP usando o método `getPrincipal()` 
+de objetos `Authentication`. Por exemplo, você pode chamar `authentication.getPrincipal()` para obter o `Principal` associado à autenticação.
+
+   ```java
+   Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+   Principal principal = (Principal) authentication.getPrincipal();
+   String username = principal.getName();
+   ```
+
+   No exemplo acima, `principal` é convertido para a interface `java.security.Principal`, e você pode obter o nome de usuário do principal usando 
+   o método `getName()`.
+
+3. **Uso Comum**: A interface `Principal` é frequentemente usada para identificar o usuário autenticado em um sistema e pode ser usada para 
+personalizar o comportamento com base no nome de usuário ou outras informações associadas ao principal.
+
+4. **Implementação Personalizada**: Em um aplicativo Spring Security, você pode criar implementações personalizadas da interface `Principal` se 
+precisar associar informações adicionais ao principal. Por exemplo, você pode criar uma implementação personalizada que além do nome do usuário,
+ inclua informações extras como ID, e-mail, ou qualquer outra informação relevante para o usuário autenticado.
+
+Em resumo, a interface `Principal` é uma parte fundamental do Java para representar a identidade do usuário autenticado e é comumente usada em 
+aplicativos Spring Security para identificar o usuário e acessar informações associadas a ele.
+
+---------- // ----------
+
+No UserController tem dois métodos em um controlador Spring que respondem a duas URLs diferentes: `/user-page` e `/admin-page`. Ambos os métodos 
+estão mapeados com a anotação `@GetMapping` para tratar solicitações GET para essas URLs específicas.
+
+```java
+    @GetMapping("/user-page")
+    public String userPage(Model model, Principal principal){
+        UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
+        model.addAttribute("user", userDetails);
+        return "user";
+    }
+```
+
+Explicação detalhada do que esses métodos fazem:
+
+1. `@GetMapping("/user-page")`: Este método é chamado quando uma solicitação GET é feita para a URL `/user-page`. Ele é projetado para lidar com 
+    a página de usuário comum.
+
+   - `public String userPage(Model model, Principal principal)`: O método aceita dois parâmetros. O primeiro é `Model model`, que é usado para 
+      adicionar atributos ao modelo, permitindo que passe dados para a camada de visualização. O segundo parâmetro é `Principal principal`, que 
+      representa o usuário autenticado.
+
+   - `UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName())`: Nesta linha, o código obtém o nome de usuário do 
+      principal usando `principal.getName()`. Em seguida, ele usa `userDetailsService` para carregar os detalhes do usuário com base no nome de 
+      usuário. Isso é comum para recuperar informações adicionais sobre o usuário.
+
+   - `model.addAttribute("user", userDetails)`: O objeto `userDetails` é adicionado ao modelo com o nome "user". Isso permite que esses detalhes 
+      do usuário sejam usados na camada de visualização.
+
+   - `return "user"`: O método retorna a string "user". Isso indica o nome do modelo de visualização a ser usado para renderizar a página de 
+      usuário. O nome "user" está associado a um modelo de visualização (arquivo HTML) que é usado para exibir a página do usuário.
+
+
+```java
+    @GetMapping("/admin-page")
+    public String adminPage(Model model, Principal principal){
+        UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
+        model.addAttribute("user", userDetails);
+        return "admin";
+    }
+```
+2. `@GetMapping("/admin-page")`: Este método é chamado quando uma solicitação GET é feita para a URL `/admin-page`. Ele é projetado para lidar 
+com a página de administração.
+
+   - O método é semelhante ao anterior, com a única diferença sendo que ele renderiza a página "admin" em vez da página "user" e que a URL é 
+     diferente.
+
+Esses métodos é para rotear os usuários para páginas específicas com base em suas autorizações após a autenticação. Eles carregam os detalhes do 
+usuário a partir do `Principal` (geralmente representando o nome de usuário) e os adicionam ao modelo, permitindo que esses detalhes sejam 
+exibidos na página de destino.
+
