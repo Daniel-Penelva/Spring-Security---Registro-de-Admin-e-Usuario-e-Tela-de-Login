@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import com.springsecurity.apitelalogin.service.CustomSuccessHandler;
 import com.springsecurity.apitelalogin.service.CustomUserDetailService;
 
 @Configuration
@@ -20,6 +21,9 @@ public class SecurityConfig {
     @Autowired
     private CustomUserDetailService customUserDetailService;
 
+    @Autowired
+    private CustomSuccessHandler customSuccessHandler;
+
     @Bean
     public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -28,14 +32,14 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf(c -> c.disable())
-                .authorizeHttpRequests(request -> request.requestMatchers("/admin-page").permitAll()
-                        .requestMatchers("/user-page").permitAll()
+                .authorizeHttpRequests(request -> request.requestMatchers("/admin-page").hasAuthority("ADMIN")
+                        .requestMatchers("/user-page").hasAnyAuthority("USER")
                         .requestMatchers("/registration", "/css/**").permitAll()
                         .anyRequest()
                         .authenticated())
                 .formLogin(form -> form.loginPage("/login")
                         .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/").permitAll())
+                        .successHandler(customSuccessHandler).permitAll())
                 .logout(form -> form.invalidateHttpSession(true)
                         .clearAuthentication(true)
                         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))

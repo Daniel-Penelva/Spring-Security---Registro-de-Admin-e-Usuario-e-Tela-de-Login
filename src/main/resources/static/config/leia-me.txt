@@ -710,3 +710,123 @@ Em resumo, este script configura o mecanismo de autenticação no Spring Securit
 carregar detalhes do usuário e que o `PasswordEncoder` (configurado como `BCryptPasswordEncoder` em um bean) será usado para verificar as senhas 
 dos usuários durante a autenticação. Isso é uma parte crítica da configuração de segurança, garantindo que o sistema possa autenticar os usuários 
 de forma segura.
+
+
+---------------------------------------------------------------------- // ----------------------------------------------------------------------
+
+Classe AuthenticationSuccessHandler
+
+A classe `AuthenticationSuccessHandler` é uma parte importante do framework Spring Security e é usada para personalizar o comportamento que 
+ocorre quando um processo de autenticação é bem-sucedido. Ela permite que defina ações específicas a serem executadas após um usuário ser 
+autenticado com sucesso, como redirecionar para uma página específica, exibir uma mensagem de boas-vindas, definir cookies ou executar qualquer 
+lógica personalizada.
+
+Normalmente, cria-se uma classe que implementa a interface `AuthenticationSuccessHandler` e substitui seu método `onAuthenticationSuccess()`. 
+Esse método é chamado quando a autenticação é bem-sucedida e permite que defina o comportamento personalizado. Aqui está uma visão geral dos 
+principais aspectos relacionados à classe `AuthenticationSuccessHandler`:
+
+1. **Personalização do Comportamento de Sucesso**: Pode personalizar o que acontece após a autenticação ser bem-sucedida. Isso é útil para 
+redirecionar os usuários para páginas específicas, definir atributos de sessão, enviar notificações, armazenar informações em cookies, registrar 
+eventos de login, entre outros.
+
+2. **Redirecionamento**: Uma tarefa comum é redirecionar o usuário após o login bem-sucedido. Por exemplo, pode redirecionar os usuários para a 
+página inicial, uma página de perfil, ou uma página personalizada de boas-vindas.
+
+3. **Tratamento de Cookies e Sessão**: Você pode definir cookies específicos após o login bem-sucedido ou limpar cookies existentes. Também é 
+possível gerenciar informações da sessão, como atributos da sessão.
+
+4. **Lógica Personalizada**: Além das tarefas padrão, pode executar qualquer lógica personalizada no método `onAuthenticationSuccess()`. 
+Isso pode incluir o registro de informações de auditoria, envio de notificações por e-mail, execução de ações com base no perfil do usuário, etc.
+
+5. **Integração com Spring Security**: A classe `AuthenticationSuccessHandler` é comumente usada em conjunto com as configurações de segurança 
+do Spring Security para substituir o comportamento padrão.
+
+Em resumo, a classe `AuthenticationSuccessHandler` permite que você defina ações personalizadas que ocorrem após um processo de autenticação 
+bem-sucedido no Spring Security. Ela oferece flexibilidade para personalizar o comportamento do aplicativo após o login bem-sucedido.
+
+---------- // ----------
+
+Explicando Passo a Passo da Classe CustomSuccessHandler:
+
+Esse código é um manipulador de sucesso de autenticação personalizado que pode ser usado no Spring Security. Este manipulador é chamado quando a 
+autenticação é bem-sucedida e permite que defina o comportamento personalizado com base nas autorizações (funções) do usuário autenticado. 
+
+
+```java
+@Override
+public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+    // var é uma Optional
+    var authourities = authentication.getAuthorities();
+    var roles = authourities.stream().map(r -> r.getAuthority()).findFirst();
+
+    if (roles.orElse("").equals("ADMIN")) {
+        response.sendRedirect("/admin-page");
+    } else if (roles.orElse("").equals("USER")) {
+        response.sendRedirect("/user-page");
+    } else {
+        response.sendRedirect("/error");
+    }
+}
+```
+
+1. `void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, 
+ServletException`: Este é o método de tratamento de sucesso de autenticação personalizado. Ele recebe três parâmetros: `HttpServletRequest` 
+(para lidar com a solicitação HTTP), `HttpServletResponse` (para lidar com a resposta HTTP) e `Authentication` (que contém informações sobre o 
+usuário autenticado).
+
+2. `var authourities = authentication.getAuthorities();`: Aqui, o código obtém as autorizações (funções) associadas ao usuário autenticado a 
+partir do objeto `Authentication`. O resultado é armazenado na variável `authourities`.
+
+3. `var roles = authourities.stream().map(r -> r.getAuthority()).findFirst();`: Isso converte as autorizações em uma sequência de strings 
+representando as autorizações do usuário. Em seguida, o método `findFirst()` é chamado, o que significa que ele pega a primeira autorização da 
+sequência (ou um valor vazio se não houver autorizações). O resultado é armazenado na variável `roles`.
+
+4. A seguir, o código verifica o valor da variável `roles` para determinar o redirecionamento com base no perfil do usuário:
+   - Se o usuário tiver a função "ADMIN", ele é redirecionado para "/admin-page".
+   - Se o usuário tiver a função "USER", ele é redirecionado para "/user-page".
+   - Se o usuário não tiver uma função correspondente, ele é redirecionado para "/error".
+
+Esse script personalizado é útil quando você deseja redirecionar os usuários com base nas autorizações que possuem após a autenticação 
+bem-sucedida. Ele oferece flexibilidade para controlar o comportamento do aplicativo após o login com base nas funções do usuário.
+
+No SecurityConfig o código abaixo: 
+
+```java
+
+// Restante do código
+
+httpSecurity.csrf(c -> c.disable())
+                .authorizeHttpRequests(request -> request.requestMatchers("/admin-page").hasAuthority("ADMIN")
+                        .requestMatchers("/user-page").hasAnyAuthority("USER")
+                        .requestMatchers("/registration", "/css/**").permitAll()
+                        .anyRequest()
+                        .authenticated())
+                .formLogin(form -> form.loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .successHandler(customSuccessHandler).permitAll())
+
+// Restante do código
+
+```
+
+1. authorizeHttpRequests(...): Define regras de autorização para diferentes URLs. A diferença principal em relação ao script anterior é o uso do 
+método hasAuthority e hasAnyAuthority para verificar as autorizações dos usuários.
+
+   -> .requestMatchers("/admin-page").hasAuthority("ADMIN"): Permite o acesso à URL "/admin-page" apenas para os usuários que têm a autorização "ADMIN".
+
+   -> .requestMatchers("/user-page").hasAnyAuthority("USER"): Permite o acesso à URL "/user-page" para os usuários que têm a autorização "USER".
+
+   -> .requestMatchers("/registration", "/css/**").permitAll(): Permite que todos acessem as URLs "/registration" e qualquer recurso CSS 
+      (URLs correspondentes a "/css/**") sem restrições.
+
+   -> .anyRequest().authenticated(): Requer autenticação para qualquer outra URL não mencionada anteriormente.
+
+
+2. .formLogin(...): Configura as páginas e ações relacionadas ao processo de login.
+
+   -> .loginPage("/login"): Define a página de login como "/login".
+
+   -> .loginProcessingUrl("/login"): Define a URL onde os dados de login são enviados para processamento.
+
+   -> .successHandler(customSuccessHandler): Configura um manipulador de sucesso de autenticação personalizado (customSuccessHandler) para lidar 
+      com o redirecionamento após um login bem-sucedido.

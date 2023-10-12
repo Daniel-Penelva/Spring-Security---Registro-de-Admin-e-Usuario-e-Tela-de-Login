@@ -38,4 +38,16 @@ public class UserController {
         return "login";
     }
 
+    // http://localhost:8080/user-page
+    @GetMapping("/user-page")
+    public String userPage(){
+        return "user";
+    }
+
+    // http://localhost:8080/admin-page
+    @GetMapping("/admin-page")
+    public String adminPage(){
+        return "admin";
+    }
+
 }
