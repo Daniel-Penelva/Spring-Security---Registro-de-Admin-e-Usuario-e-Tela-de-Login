@@ -16,11 +16,18 @@ public class CustomUserDetail implements UserDetails {
         this.user = user;
     }
 
+    // Métodos já definidos para obter informações sobre um usuário e suas credenciais.
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(() -> user.getRole());
     }
 
+    // Método criado para capturar o fullname
+    public String getFullname() {
+        return user.getFullname();
+    }
+
+    // Métodos já definidos para obter informações sobre um usuário e suas credenciais.
     @Override
     public String getPassword() {
         return user.getPassword();

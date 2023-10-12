@@ -177,3 +177,88 @@ repositório de usuários (como um banco de dados) e fornecê-los ao Spring Secu
 
 No geral, a interface `UserDetails` é fundamental para a implementação de autenticação segura em aplicativos Spring com o Spring Security, 
 permitindo que você forneça detalhes de usuário e suas permissões de maneira personalizada e flexível.
+
+---------------------------------------------------------------------- // ----------------------------------------------------------------------
+
+Interface UserDetailsService
+
+A interface `UserDetailsService` é uma parte importante do Spring Security, um framework amplamente utilizado para segurança e autenticação em 
+aplicativos Java. A `UserDetailsService` desempenha um papel fundamental no carregamento de informações de usuário durante o processo de 
+autenticação em um aplicativo Spring Security.
+
+A principal função da `UserDetailsService` é carregar informações sobre um usuário a partir de uma origem de dados, como um banco de dados, um 
+serviço web ou qualquer outro repositório de usuários, e disponibilizar essas informações ao Spring Security para a autenticação. Ela define um 
+único método:
+
+```java
+UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
+```
+
+Principais pontos sobre a `UserDetailsService`:
+
+1. **`loadUserByUsername(String username)`**: Este método é responsável por carregar as informações do usuário com base no nome de usuário 
+fornecido como argumento. Geralmente, você implementa este método para recuperar os detalhes do usuário, incluindo seu nome de usuário, senha e 
+as permissões associadas, a partir do repositório de dados correspondente.
+
+2. **`UserDetails`**: O método `loadUserByUsername` retorna um objeto `UserDetails`. A `UserDetails` é uma interface que representa os detalhes 
+de um usuário no contexto da segurança. Ela inclui informações como nome de usuário, senha, autorizações e informações de status da conta.
+
+3. **Tratamento de exceções**: O método `loadUserByUsername` lança a exceção `UsernameNotFoundException` se o usuário com o nome de usuário 
+fornecido não for encontrado. Isso permite lidar com casos em que o usuário não existe.
+
+4. **Implementação personalizada**: Você normalmente cria uma classe que implementa a interface `UserDetailsService` para personalizar a forma 
+como os detalhes do usuário são recuperados. Essa implementação é especificada no contexto de configuração do Spring Security.
+
+5. **Integração com Spring Security**: No arquivo de configuração do Spring Security, você vincula a implementação personalizada da 
+`UserDetailsService` ao mecanismo de autenticação. Isso permite que o Spring Security use sua classe `UserDetailsService` para carregar os 
+detalhes do usuário durante o processo de login.
+
+A `UserDetailsService` é um componente essencial na estratégia de autenticação do Spring Security. Ela permite que você integre facilmente seus 
+aplicativos com sistemas de gerenciamento de usuários existentes e forneça informações de usuário personalizadas, como detalhes de autenticação 
+e autorização, para o Spring Security. Isso é fundamental para a criação de sistemas de autenticação robustos e seguros em aplicativos Spring.
+
+---------------------------------------------------------------------- // ----------------------------------------------------------------------
+
+Inteface PasswordEncoder
+
+A interface `PasswordEncoder` faz parte do Spring Security e desempenha um papel importante no processo de codificação e verificação de senhas. 
+Ela é usada para proteger as senhas dos usuários armazenadas em um aplicativo, garantindo que elas não sejam armazenadas em texto simples no 
+banco de dados. A interface `PasswordEncoder` é projetada para fornecer uma maneira segura de criptografar senhas e verificar senhas fornecidas 
+durante o processo de autenticação.
+
+A interface `PasswordEncoder` define os seguintes métodos principais:
+
+1. **`encode(CharSequence rawPassword)`**: Este método é usado para criptografar uma senha em texto simples. Ele aceita uma sequência de 
+caracteres (`CharSequence`) representando a senha em texto simples e retorna uma versão criptografada (hash) da senha.
+
+2. **`matches(CharSequence rawPassword, String encodedPassword)`**: Este método é usado para verificar se uma senha em texto simples corresponde 
+a uma senha criptografada (hash). Ele aceita a senha em texto simples e a senha criptografada e retorna `true` se as senhas correspondem, ou 
+`false` caso contrário.
+
+O Spring Security oferece várias implementações de `PasswordEncoder`, cada uma usando um algoritmo de hash específico para proteger as senhas. 
+Alguns dos algoritmos comuns incluem:
+
+- BCrypt: Um algoritmo de hashing de senhas seguro e amplamente utilizado.
+- SCrypt: Um algoritmo de hashing de senhas que é mais intensivo em recursos, fornecendo uma camada adicional de segurança.
+- Pbkdf2: Uma implementação do algoritmo de derivação de chaves baseado em senha.
+
+Ao usar o Spring Security, você pode configurar qual implementação de `PasswordEncoder` deseja usar no seu aplicativo, geralmente durante a 
+configuração de segurança. O Spring Security cuidará então de criptografar e verificar as senhas de forma apropriada durante o processo de 
+autenticação.
+
+Usar um `PasswordEncoder` é uma prática recomendada para garantir que as senhas dos usuários sejam armazenadas com segurança e não estejam em 
+texto simples no banco de dados. Isso é fundamental para proteger as informações dos usuários em caso de uma violação de segurança.
+
+---------- // ----------
+
+Essa codificação `passwordEncoder.encode(userDto.getPassword())` no UserserviceImpl, tem como principal objetivo garantir que a senha do usuário 
+seja armazenada no banco de dados de forma segura, ou seja, em uma forma criptografada (não em texto simples). Quando um usuário se inscreve ou 
+atualiza sua senha, a senha em texto simples é passada para encode(), que a converte em uma forma criptografada. Essa forma criptografada é a que 
+é realmente armazenada no banco de dados.
+
+Durante o processo de autenticação, o Spring Security também usa o mesmo algoritmo de criptografia para codificar a senha fornecida pelo usuário 
+no momento do login e a compara com a senha criptografada armazenada no banco de dados. Se as senhas correspondem, a autenticação é bem-sucedida.
+
+Usar uma técnica de criptografia como o passwordEncoder.encode() é uma prática recomendada para proteger as senhas dos usuários em um aplicativo 
+Spring Security e evitar que elas sejam armazenadas em texto simples, o que tornaria as informações dos usuários vulneráveis em caso de violação 
+de segurança.
