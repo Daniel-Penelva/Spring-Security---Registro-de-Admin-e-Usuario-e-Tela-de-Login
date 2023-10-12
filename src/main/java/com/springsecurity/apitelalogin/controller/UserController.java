@@ -32,4 +32,10 @@ public class UserController {
         return "register";
     }
 
+    // http://localhost:8080/login
+    @GetMapping("/login")
+    public String login(){
+        return "login";
+    }
+
 }
